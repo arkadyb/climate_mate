@@ -1,0 +1,12 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: climate_mate
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: climate_mate
+  policy:
+    semver:
+      range: 1.0.x

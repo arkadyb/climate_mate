@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/network-tier: Standard
+  name: nginx
+  namespace: default
+spec:
+  type: LoadBalancer
+  loadBalancerIP: "35.209.21.126"
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080

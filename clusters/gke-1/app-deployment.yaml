@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: default
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: us-central1-docker.pkg.dev/the-project-415801/samples/static-site:1.0.148 # {"$imagepolicy": "flux-system:the-project"}
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PG_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: gke-pg-cluster-app
+              key: username
+        - name: PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: gke-pg-cluster-app
+              key: password
+        - name: PG_HOSTNAME
+          valueFrom:
+            secretKeyRef:
+              name: gke-pg-cluster-app
+              key: host
+        - name: PG_PORT
+          valueFrom:
+            secretKeyRef:
+              name: gke-pg-cluster-app
+              key: port
+        - name: PG_DBNAME
+          valueFrom:
+            secretKeyRef:
+              name: gke-pg-cluster-app
+              key: dbname
+        - name: GOOGLEAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: googleai
+              key: api_key
+        resources:
+          limits:
+            cpu: 250m
+            memory: 512Mi
+          requests:
+            cpu: 50m
+            memory: 64Mi
+        readinessProbe:
+          initialDelaySeconds: 3
+          periodSeconds: 2
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 1
+          httpGet:
+            host:
+            scheme: HTTP
+            path: /health
+            port: 8080
+        livenessProbe:
+          initialDelaySeconds: 3
+          periodSeconds: 2
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 1
+          httpGet:
+            host:
+            scheme: HTTP
+            path: /health
+            port: 8080

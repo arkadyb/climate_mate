@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Climate Mate</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #e8f5e9; /* Light green background for an eco-friendly feel */
+            color: #333;
+            text-align: center;
+        }
+        .button, .send-button {
+            display: block;
+            padding: 10px 20px;
+            margin: 10px auto; /* Center buttons */
+            width: 320px;
+            background-color: #4CAF50; /* Green color for buttons */
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.25);
+        }
+        .button:hover {
+            background-color: #388E3C; /* Darker green on hover */
+            transform: translateY(-2px); /* Slight lift on hover */
+        }
+        .send-button:disabled {
+            background-color: #ccc; /* Grey color when disabled */
+            cursor: not-allowed; /* Change cursor to not-allowed */
+        }
+        textarea {
+            display: block;
+            margin: 20px auto; /* Center textarea */
+            padding: 10px;
+            width: 80%; /* Responsive width */
+            max-width: 500px; /* Maximum width */
+            height: 100px; /* Fixed height */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+        label {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-family: 'Courier New', monospace;
+        }
+        h1 {
+            color: #1B5E20; /* Dark green color for headings */
+            font-family: 'Courier New', monospace;
+            margin-bottom: 0;
+        }
+        p {
+            font-family: 'Courier New', monospace;
+            margin-top: 5px;
+        }
+        #spinner {
+            display: none; /* Initially hidden */
+        }
+        #answer {
+            display: none; /* Initially hidden */
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        function sendQueryRequest() {
+            const options = {method: 'GET', mode: 'cors'};
+            const query = document.getElementById("chat").value;  
+            return fetch(`http://theprj.com/v1/query?q=${encodeURIComponent(query)}`, options)
+                .then(response => response.json())
+                .then(data =>{
+                    document.getElementById('answer').innerText = data.answer;
+                    document.getElementById('answer').style.display = 'block';
+                })
+                .catch(err => console.error(err));
+        }
+        function handleSend() {
+            document.getElementById('answer').innerText = "";
+            document.getElementById('answer').style.display = 'none';
+            document.querySelector('.send-button').disabled = true;
+            document.getElementById('spinner').style.display = 'block';
+            sendQueryRequest()
+                .then(() => {
+                    document.querySelector('.send-button').disabled = false;
+                    document.getElementById('spinner').style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+        function copyAndAsk(button){
+            document.getElementById("chat").value = button.innerText;
+            handleSend();
+        }
+    </script> 
+    <h1>Climate Mate</h1>
+    <p>Your AI climate chatbot based on scientific data.</p>
+    <p>Climate Mate can help you understand facts behind climate change in relations to each other.</p>
+    <p>It will help you estimate impact of climate changes based on the latest models.</p>
+    <p>And most important, it will <b>encourage you to act!</b></p>
+    <p>Here are some example questions you can start with:</p>
+    <div class="text-center">
+        <a href="#" class="button" onclick="copyAndAsk(this)">Explain the relation of CO2 level and global temperature.</a>
+        <a href="#" class="button" onclick="copyAndAsk(this)">What can I do to slow down climate change?</a>
+        <a href="#" class="button" onclick="copyAndAsk(this)">Estimate sea level rise by 2030?</a>
+    </div>
+    <label for="chat">Chat input</label>
+    <textarea id="chat" name="chat" rows="4" cols="50">
+How much sea level will rise by 2030?
+    </textarea>
+    <button type="submit" class="send-button" onclick="handleSend()">Send</button>
+    <div id="spinner"> <!-- Spinner div -->
+        Loading...
+    </div>
+    <div id="answer"></div>
+</body>
+</html>

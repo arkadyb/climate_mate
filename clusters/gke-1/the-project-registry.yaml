@@ -1,0 +1,11 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: climate_mate
+  namespace: flux-system
+spec:
+  image: us-central1-docker.pkg.dev/the-project-415801/samples/static-site
+  interval: 1m0s
+  secretRef:
+    name: regcred
