@@ -18,18 +18,18 @@ Navigate to [http://www.climate-mate.org](http://www.climate-mate.org) and try a
 
 ## Exposed endpoints
 
-[POST] http://www.climate-mate.org/v1/upload\
+[POST] http://www.climate-mate.org/v1/upload  
 This is protected endpoint. The one used to upload and index the file, where the request body is multipart form with two fields - `file` (bin) and `summary` (string)
 
-[GET] http://www.climate-mate.org/v1/query\
-Query endpoint is used to return an answer to the user's question.\
+[GET] http://www.climate-mate.org/v1/query  
+Query endpoint is used to return an answer to the user's question.  
 Arguments:
 
 - `required` q - the user question. For example: `?q="what is climate change?"`
 - `optional` searchby - strategy used search in indexed documents. Supports two options: `top` (default) and `wide`. Here `top` picks the top N pages by score, whereas `wide` takes top N/(number of files) from each file to form a final list.
 
-[GET] http://www.climate-mate.org/v1/search\
-Semantic search in vectore store by user input.\
+[GET] http://www.climate-mate.org/v1/search  
+Semantic search in vectore store by user input.  
 Arguments:
 
 - `required` q - same as in `query`
